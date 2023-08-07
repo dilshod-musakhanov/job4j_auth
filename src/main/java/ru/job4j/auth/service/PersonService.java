@@ -13,8 +13,10 @@ import java.util.Optional;
 public class PersonService {
     private final PersonRepository personRepository;
 
-    public Person save(Person person) {
-        return personRepository.save(person);
+    public Optional<Person> save(Person person) {
+        return findByLogin(person.getLogin())
+                .map(existingPerson -> Optional.<Person>empty())
+                .orElseGet(() -> Optional.of(personRepository.save(person)));
     }
 
     public List<Person> findAll() {
@@ -23,6 +25,10 @@ public class PersonService {
 
     public Optional<Person> findById(int id) {
         return personRepository.findById(id);
+    }
+
+    public Optional<Person> findByLogin(String login) {
+        return personRepository.findByLogin(login);
     }
 
     public void delete(Person person) {
