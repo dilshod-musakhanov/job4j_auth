@@ -36,7 +36,7 @@ public class PersonController {
     public ResponseEntity<Person> create(@RequestBody Person person) {
         var result = personService.save(person);
         return result.map(p -> new ResponseEntity<>(p, HttpStatus.CREATED))
-                .orElseGet(() -> new ResponseEntity<>(null, HttpStatus.CONFLICT));
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.CONFLICT));
     }
 
     @PutMapping("/")
