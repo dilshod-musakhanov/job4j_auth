@@ -1,5 +1,6 @@
 package ru.job4j.auth.controller;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import ru.job4j.auth.model.Person;
 
 import lombok.AllArgsConstructor;
@@ -13,11 +14,12 @@ import java.util.List;
 
 @Controller
 @AllArgsConstructor
-@RequestMapping("/person")
+@RequestMapping("/persons")
 public class PersonController {
     private final PersonService personService;
+    private final BCryptPasswordEncoder encoder;
 
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<List<Person>> findAll() {
         List<Person> persons = personService.findAll();
         return new ResponseEntity<>(persons, HttpStatus.OK);
@@ -32,8 +34,9 @@ public class PersonController {
         );
     }
 
-    @PostMapping("/")
+    @PostMapping("/sign-up")
     public ResponseEntity<Person> create(@RequestBody Person person) {
+        person.setPassword(encoder.encode(person.getPassword()));
         var result = personService.save(person);
         return result.map(p -> new ResponseEntity<>(p, HttpStatus.CREATED))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.CONFLICT));
@@ -52,4 +55,5 @@ public class PersonController {
         personService.delete(person);
         return ResponseEntity.ok().build();
     }
+
 }
