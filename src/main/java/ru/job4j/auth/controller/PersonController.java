@@ -3,6 +3,7 @@ package ru.job4j.auth.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.server.ResponseStatusException;
+import ru.job4j.auth.dto.PersonDto;
 import ru.job4j.auth.model.Person;
 
 import lombok.AllArgsConstructor;
@@ -67,6 +68,21 @@ public class PersonController {
     public ResponseEntity<Void> update(@RequestBody Person person) {
         personService.save(person);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/updatePassword")
+    public ResponseEntity<Void> updatePassword(@RequestBody PersonDto personDto) {
+        var password = personDto.getPassword();
+        if (password == null) {
+            throw new NullPointerException();
+        }
+        if (password.length() < 3) {
+            throw new IllegalArgumentException(
+                    "Invalid password. Password length must be minimum 3 or more characters."
+            );
+        }
+        personDto.setPassword(encoder.encode(personDto.getPassword()));
+        return personService.updatePassword(personDto) ? ResponseEntity.ok().build() : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")

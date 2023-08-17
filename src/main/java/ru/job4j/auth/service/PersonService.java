@@ -2,6 +2,7 @@ package ru.job4j.auth.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.job4j.auth.dto.PersonDto;
 import ru.job4j.auth.model.Person;
 import ru.job4j.auth.repository.PersonRepository;
 
@@ -33,5 +34,16 @@ public class PersonService {
 
     public void delete(Person person) {
         personRepository.delete(person);
+    }
+
+    public boolean updatePassword(PersonDto personDto) {
+        var optionalPerson = personRepository.findById(personDto.getId());
+        if (optionalPerson.isEmpty()) {
+            return false;
+        }
+        var person = optionalPerson.get();
+        person.setPassword(personDto.getPassword());
+        personRepository.save(person);
+        return true;
     }
 }
