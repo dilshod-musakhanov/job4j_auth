@@ -7,7 +7,6 @@ import ru.job4j.auth.handlers.Operation;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 @Data
@@ -15,7 +14,6 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class PersonDto {
     @NotNull(message = "Id is mandatory", groups = Operation.OnUpdatePassword.class)
-    @Positive
     private int id;
 
     @NotBlank(message = "Password is mandatory")

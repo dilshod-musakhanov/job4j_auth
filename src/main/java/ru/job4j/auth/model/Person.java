@@ -9,7 +9,6 @@ import ru.job4j.auth.handlers.Operation;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 @Data
@@ -21,7 +20,6 @@ import javax.validation.constraints.Size;
 public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Positive
     @NotNull(message = "Id must be non null", groups = {Operation.OnDelete.class, Operation.OnUpdate.class})
     private int id;
 
